@@ -8,13 +8,17 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "preview": "npx astro build && npx wrangler dev",
+    "astro": "astro",
+    "deploy": "npx astro build && npx wrangler deploy"
   },
   "dependencies": {
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/simple-icons": "^1.2.79",
     "astro": "^6.1.8",
     "astro-icon": "^1.1.5"
+  },
+  "devDependencies": {
+    "wrangler": "^4.83.0"
   }
 }
