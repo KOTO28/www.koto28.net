@@ -1,0 +1,28 @@
+---
+import socialLinks from "../../data/social-links.json";
+import Layout from "../../layouts/Layout.astro";
+import ExternalLink from "../../components/navigation/ExternalLink.astro";
+import InternalLink from "../../components/navigation/InternalLink.astro";
+
+const mail = socialLinks.find((link) => link.name === "email");
+if (!mail) {
+  throw new Error("Email link not found in social-links.json");
+}
+---
+
+<Layout title="Contact">
+  <h1>Contact</h1>
+  <p>問い合わせはメールおよびGoogleフォームで受け付けています。</p>
+  <h2>Email</h2>
+  <ExternalLink url={mail.url}>{mail.id}</ExternalLink>
+  <h2>Google Form</h2>
+  <InternalLink href="/contact/form">問い合わせフォーム</InternalLink>
+</Layout>
+
+<style>
+  iframe {
+    width: 100%;
+    min-height: 100%;
+    border: none;
+  }
+</style>

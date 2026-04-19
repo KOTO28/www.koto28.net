@@ -1,0 +1,23 @@
+---
+type Props = {
+  url: string;
+  class?: string;
+  [key: string]: unknown;
+};
+
+const { url, class: className, ...rest }: Props = Astro.props;
+---
+
+<a href={url} target="_blank" rel="noopener noreferrer" class={className} {...rest}>
+  <slot />
+</a>
+
+<style>
+  a {
+    color: var(--link-text-color);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+</style>

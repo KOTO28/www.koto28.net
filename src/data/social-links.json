@@ -1,0 +1,24 @@
+[
+  {
+    "name": "email",
+    "display": "Email",
+    "id": "koto28@koto28.net",
+    "url": "mailto:koto28@koto28.net",
+    "icon": "mdi:email"
+  },
+  {
+    "name": "github",
+    "display": "GitHub",
+    "id": "@KOTO28",
+    "url": "https://github.com/KOTO28",
+    "icon": "simple-icons:github"
+  },
+  { "name": "twitter", "display": "X", "id": "@KOTO28net", "url": "https://x.com/KOTO28net", "icon": "simple-icons:x" },
+  {
+    "name": "bluesky",
+    "display": "Bluesky",
+    "id": "@koto28.net",
+    "url": "https://bsky.app/profile/koto28.net",
+    "icon": "simple-icons:bluesky"
+  }
+]

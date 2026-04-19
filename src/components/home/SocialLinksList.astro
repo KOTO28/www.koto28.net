@@ -1,0 +1,38 @@
+---
+import { Icon } from "astro-icon/components";
+import socialLinks from "../../data/social-links.json";
+import ExternalLink from "../navigation/ExternalLink.astro";
+---
+
+<ul>
+  {
+    socialLinks.map((link) => (
+      <li>
+        <ExternalLink url={link.url} class="social-link">
+          <Icon name={link.icon} />
+          <span>{link.id}</span>
+        </ExternalLink>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  ul {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+  }
+
+  span {
+    margin-left: 0.5rem;
+  }
+</style>
