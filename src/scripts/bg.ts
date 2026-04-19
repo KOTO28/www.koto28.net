@@ -9,15 +9,33 @@ const trailLineWidth = 2; // 軌跡の線の太さ
 const trailMaxLength = 300; // 軌跡の最大長さ(px)
 const boundsMargin = 300; // 移動範囲を広げる余白(px)
 
+// 型定義
+type Particle = {
+  x: number;
+  y: number;
+  size: number;
+  speed: number;
+  direction: number;
+  trail: { x: number; y: number }[];
+  trailLength: number;
+};
+
 // DOM要素の取得
-const canvas = document.getElementById("background-canvas");
+const canvas = document.getElementById("background-canvas") as HTMLCanvasElement;
+
+if (!canvas) {
+  throw new Error("Canvas element not found");
+}
 
 // キャンバスのサイズをウィンドウに合わせる
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+if (!ctx) {
+  throw new Error("Canvas context not found");
+}
 
-function hexToRgb(hex) {
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
   const value = hex.replace("#", "");
   if (value.length === 3) {
     const r = parseInt(value[0] + value[0], 16);
@@ -31,16 +49,16 @@ function hexToRgb(hex) {
     const b = parseInt(value.slice(4, 6), 16);
     return { r, g, b };
   }
-  return null;
+  throw new Error(`Invalid hex color: ${hex}`);
 }
 
-const trailColorRgb = hexToRgb(trailColor) || { r: 255, g: 255, b: 255 };
-function trailStrokeStyle(alpha) {
+const trailColorRgb = hexToRgb(trailColor);
+function trailStrokeStyle(alpha: number): string {
   return `rgba(${trailColorRgb.r}, ${trailColorRgb.g}, ${trailColorRgb.b}, ${alpha})`;
 }
 
 // 変数の初期化
-let particles = [];
+let particles: Particle[] = [];
 let numParticles = 0;
 
 function reset() {
@@ -73,13 +91,13 @@ function reset() {
 reset();
 
 // パーティクルの更新
-function updateParticles(deltaMs) {
+function updateParticles(deltaMs: number) {
   const minX = -boundsMargin;
   const maxX = canvas.width + boundsMargin;
   const minY = -boundsMargin;
   const maxY = canvas.height + boundsMargin;
 
-  particles.forEach((p) => {
+  particles.forEach((p: Particle) => {
     // 向きの更新
     const dt = deltaMs / 1000;
     const turnProb = 1 - Math.exp(-turnRatePerSec * dt);
@@ -150,7 +168,7 @@ function drawParticles() {
 
   // trails
   ctx.lineWidth = trailLineWidth;
-  particles.forEach((p) => {
+  particles.forEach((p: Particle) => {
     const trail = p.trail;
     if (trail.length < 2) return;
     const lastIndex = trail.length - 1;
@@ -176,7 +194,7 @@ function drawParticles() {
 
 // アニメーションループ
 let lastTime = 0;
-function animate(time) {
+function animate(time: number) {
   let deltaMs = time - lastTime;
   lastTime = time;
   if (deltaMs > 500) {
