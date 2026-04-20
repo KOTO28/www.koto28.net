@@ -1,0 +1,10 @@
+:root {
+  /* root */
+  --text-color: #eef;
+  --link-text-color: #5070f3;
+
+  /* components */
+  --header-bg-color: #0000;
+  --footer-border-color: #444;
+  --footer-bg-color: #20202d;
+}
