@@ -8,3 +8,10 @@
   --footer-border-color: #444;
   --footer-bg-color: #20202d;
 }
+
+html {
+  color: var(--text-color);
+  background-color: #000012;
+  font-family: var(--font-noto-sans-jp), sans-serif;
+  font-size: 16px;
+}
