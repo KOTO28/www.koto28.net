@@ -4,7 +4,8 @@ const PARTICLE_SIZE = 8; // パーティクルのサイズ
 const PARTICLE_SPEED = 0.2; // パーティクルの速度
 const TURN_RATE_PER_SEC = 0.5; // 1秒あたりの向き変更頻度
 const BG_COLOR = "#000012"; // 背景色
-const TRAIL_COLOR = "#53c8f0"; // 軌跡の線の色
+const DEFAULT_TRAIL_COLOR = "#53c8f0"; // 軌跡の線の色
+const SECRET_TRAIL_COLOR = "#f13f27"; // 隠しコマンドで変更される軌跡の線の色
 const TRAIL_LINE_WIDTH = 2; // 軌跡の線の太さ
 const TRAIL_MAX_LENGTH = 300; // 軌跡の最大長さ(px)
 const BOUNDS_MARGIN = 300; // 移動範囲を広げる余白(px)
@@ -52,14 +53,14 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
   throw new Error(`Invalid hex color: ${hex}`);
 }
 
-const trailColorRgb = hexToRgb(TRAIL_COLOR);
-function trailStrokeStyle(alpha: number): string {
-  return `rgba(${trailColorRgb.r}, ${trailColorRgb.g}, ${trailColorRgb.b}, ${alpha})`;
-}
-
 // 変数の初期化
 let particles: Particle[] = [];
 let numParticles = 0;
+let trailColorRgb = hexToRgb(DEFAULT_TRAIL_COLOR);
+
+function trailStrokeStyle(alpha: number): string {
+  return `rgba(${trailColorRgb.r}, ${trailColorRgb.g}, ${trailColorRgb.b}, ${alpha})`;
+}
 
 function reset() {
   // 面積に合わせてパーティクルの数を設定
@@ -214,4 +215,30 @@ window.addEventListener("resize", () => {
   canvas.height = window.innerHeight;
 
   reset();
+});
+
+// 隠しコマンド
+const hiddenCommandSequence = [
+  "ArrowUp",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowLeft",
+  "ArrowRight",
+  "b",
+  "a",
+];
+let hiddenCommandIndex = 0;
+document.addEventListener("keydown", (event) => {
+  if (event.key === hiddenCommandSequence[hiddenCommandIndex]) {
+    hiddenCommandIndex++;
+    if (hiddenCommandIndex === hiddenCommandSequence.length) {
+      trailColorRgb = hexToRgb(SECRET_TRAIL_COLOR);
+      hiddenCommandIndex = 0;
+    }
+  } else {
+    hiddenCommandIndex = 0;
+  }
 });
