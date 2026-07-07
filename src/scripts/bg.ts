@@ -1,13 +1,13 @@
 // 設定
-const particleDensity = 0.00002; // パーティクルの密度
-const particleSize = 8; // パーティクルのサイズ
-const particleSpeed = 0.2; // パーティクルの速度
-const turnRatePerSec = 0.5; // 1秒あたりの向き変更頻度
-const bgColor = "#000012"; // 背景色
-const trailColor = "#53c8f0"; // 軌跡の線の色
-const trailLineWidth = 2; // 軌跡の線の太さ
-const trailMaxLength = 300; // 軌跡の最大長さ(px)
-const boundsMargin = 300; // 移動範囲を広げる余白(px)
+const PARTICLE_DENSITY = 0.00002; // パーティクルの密度
+const PARTICLE_SIZE = 8; // パーティクルのサイズ
+const PARTICLE_SPEED = 0.2; // パーティクルの速度
+const TURN_RATE_PER_SEC = 0.5; // 1秒あたりの向き変更頻度
+const BG_COLOR = "#000012"; // 背景色
+const TRAIL_COLOR = "#53c8f0"; // 軌跡の線の色
+const TRAIL_LINE_WIDTH = 2; // 軌跡の線の太さ
+const TRAIL_MAX_LENGTH = 300; // 軌跡の最大長さ(px)
+const BOUNDS_MARGIN = 300; // 移動範囲を広げる余白(px)
 
 // 型定義
 type Particle = {
@@ -52,7 +52,7 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
   throw new Error(`Invalid hex color: ${hex}`);
 }
 
-const trailColorRgb = hexToRgb(trailColor);
+const trailColorRgb = hexToRgb(TRAIL_COLOR);
 function trailStrokeStyle(alpha: number): string {
   return `rgba(${trailColorRgb.r}, ${trailColorRgb.g}, ${trailColorRgb.b}, ${alpha})`;
 }
@@ -63,15 +63,15 @@ let numParticles = 0;
 
 function reset() {
   // 面積に合わせてパーティクルの数を設定
-  const area = (canvas.width + boundsMargin * 2) * (canvas.height + 2 * boundsMargin * 2);
-  numParticles = Math.floor(particleDensity * area);
+  const area = (canvas.width + BOUNDS_MARGIN * 2) * (canvas.height + 2 * BOUNDS_MARGIN * 2);
+  numParticles = Math.floor(PARTICLE_DENSITY * area);
 
   particles = [];
 
-  const minX = -boundsMargin;
-  const maxX = canvas.width + boundsMargin;
-  const minY = -boundsMargin;
-  const maxY = canvas.height + boundsMargin;
+  const minX = -BOUNDS_MARGIN;
+  const maxX = canvas.width + BOUNDS_MARGIN;
+  const minY = -BOUNDS_MARGIN;
+  const maxY = canvas.height + BOUNDS_MARGIN;
 
   // パーティクルの初期化
   for (let i = 0; i < numParticles; i++) {
@@ -80,8 +80,8 @@ function reset() {
     particles.push({
       x: startX,
       y: startY,
-      size: particleSize,
-      speed: particleSpeed,
+      size: PARTICLE_SIZE,
+      speed: PARTICLE_SPEED,
       direction: Math.floor(Math.random() * 8) * (Math.PI / 4),
       trail: [{ x: startX, y: startY }],
       trailLength: 0,
@@ -92,15 +92,15 @@ reset();
 
 // パーティクルの更新
 function updateParticles(deltaMs: number) {
-  const minX = -boundsMargin;
-  const maxX = canvas.width + boundsMargin;
-  const minY = -boundsMargin;
-  const maxY = canvas.height + boundsMargin;
+  const minX = -BOUNDS_MARGIN;
+  const maxX = canvas.width + BOUNDS_MARGIN;
+  const minY = -BOUNDS_MARGIN;
+  const maxY = canvas.height + BOUNDS_MARGIN;
 
   particles.forEach((p: Particle) => {
     // 向きの更新
     const dt = deltaMs / 1000;
-    const turnProb = 1 - Math.exp(-turnRatePerSec * dt);
+    const turnProb = 1 - Math.exp(-TURN_RATE_PER_SEC * dt);
     if (Math.random() < turnProb) {
       if (Math.random() < 0.5) {
         p.direction += Math.PI / 4; // 時計回り
@@ -149,7 +149,7 @@ function updateParticles(deltaMs: number) {
     const segmentLength = Math.hypot(dx, dy);
     p.trail.push({ x: p.x, y: p.y });
     p.trailLength += segmentLength;
-    while (p.trailLength > trailMaxLength && p.trail.length > 1) {
+    while (p.trailLength > TRAIL_MAX_LENGTH && p.trail.length > 1) {
       const first = p.trail[0];
       const second = p.trail[1];
       const segDx = second.x - first.x;
@@ -163,11 +163,11 @@ function updateParticles(deltaMs: number) {
 // パーティクルの描画
 function drawParticles() {
   // bg
-  ctx.fillStyle = bgColor;
+  ctx.fillStyle = BG_COLOR;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // trails
-  ctx.lineWidth = trailLineWidth;
+  ctx.lineWidth = TRAIL_LINE_WIDTH;
   particles.forEach((p: Particle) => {
     const trail = p.trail;
     if (trail.length < 2) return;
